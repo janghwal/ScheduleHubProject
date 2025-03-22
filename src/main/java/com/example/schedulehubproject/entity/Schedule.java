@@ -3,6 +3,7 @@ package com.example.schedulehubproject.entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Getter
@@ -29,4 +30,13 @@ public class Schedule {
         this.contents = contents;
     }
 
+
+    public Schedule(long scheduleId, String name, String title, String contents, Timestamp createAt, Timestamp updateAt) {
+        this.scheduleId = scheduleId;
+        this.name = name;
+        this.title = title;
+        this.contents = contents;
+        this.createAt = createAt.toLocalDateTime();
+        this.updateAt = updateAt.toLocalDateTime();
+    }
 }

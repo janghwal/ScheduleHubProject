@@ -14,4 +14,8 @@ public interface ScheduleHubService {
     List<ScheduleHubResponseDto> findAllSchedule();
 
     List<ScheduleHubResponseDto> findFilteredSchedule(FilterRequestDto filterRequestDto);
+
+    ScheduleHubResponseDto updateSchedule(Long scheduleId, ScheduleHubRequestDto scheduleHubRequestDto);
+
+    void deleteSchedule(Long scheduleId, ScheduleHubRequestDto scheduleHubRequestDto);
 }

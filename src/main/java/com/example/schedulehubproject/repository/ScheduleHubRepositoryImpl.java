@@ -77,6 +77,30 @@ public class ScheduleHubRepositoryImpl implements ScheduleHubRepository{
         }
     }
 
+    @Override
+    public String getPassword(Long scheduleId) {
+        return jdbcTemplate.query("select password from schedule where schedule_id = ?", scheduleHubGetPasswordRowMapper(), scheduleId).get(0);
+    }
+
+    @Override
+    public int updateSchedule(Schedule schedule) {
+        return jdbcTemplate.update("update schedule set title = ?, contents = ?, name = ? where schedule_id = ?", schedule.getTitle(), schedule.getContents(), schedule.getName(), schedule.getScheduleId());
+    }
+
+    @Override
+    public int deleteSchedule(Long scheduleId) {
+        return jdbcTemplate.update("delete from schedule where schedule_id = ?", scheduleId);
+    }
+
+    private RowMapper<String> scheduleHubGetPasswordRowMapper() {
+        return new RowMapper<String>() {
+            @Override
+            public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getString("password");
+            }
+        };
+    }
+
     private RowMapper<ScheduleHubResponseDto> scheduleHubFindFilteredRowMapper() {
         return new RowMapper<ScheduleHubResponseDto>() {
             @Override

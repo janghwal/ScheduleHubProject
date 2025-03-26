@@ -24,6 +24,13 @@ public class Schedule {
         this.contents = contents;
     }
 
+    public Schedule(Long scheduleId, String name, String title, String contents) {
+        this.scheduleId = scheduleId;
+        this.name = name;
+        this.title = title;
+        this.contents = contents;
+    }
+
     public Schedule(String name, String title, String contents) {
         this.name = name;
         this.title = title;

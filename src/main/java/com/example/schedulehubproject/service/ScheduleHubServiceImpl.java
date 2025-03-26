@@ -9,6 +9,7 @@ import com.example.schedulehubproject.repository.ScheduleHubRepository;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -65,5 +66,46 @@ public class ScheduleHubServiceImpl implements  ScheduleHubService{
             default -> new FilterNameUpdateAt(filterRequestDto.getName(), null);
         };
         return scheduleHubRepository.findFilteredSchedule(filterNameUpdateAt);
+    }
+
+    @Transactional
+    @Override
+    public ScheduleHubResponseDto updateSchedule(Long scheduleId, ScheduleHubRequestDto scheduleHubRequestDto) {
+        String PW = scheduleHubRepository.getPassword(scheduleId);
+
+        if(!PW.equals(scheduleHubRequestDto.getPassword())){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
+        if(scheduleHubRequestDto.getName() == null || scheduleHubRequestDto.getContents() == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        Schedule schedule = new Schedule(scheduleId, scheduleHubRequestDto.getName(), scheduleHubRequestDto.getTitle(), scheduleHubRequestDto.getContents());
+        int scheduleRow = scheduleHubRepository.updateSchedule(schedule);
+
+        if (scheduleRow == 0){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        Optional<Schedule> optionalSchedule = scheduleHubRepository.findScheduleById(scheduleId);
+
+        return new ScheduleHubResponseDto(optionalSchedule.get());
+    }
+
+    @Transactional
+    @Override
+    public void deleteSchedule(Long scheduleId, ScheduleHubRequestDto scheduleHubRequestDto) {
+        String PW = scheduleHubRepository.getPassword(scheduleId);
+
+        if(!PW.equals(scheduleHubRequestDto.getPassword())){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
+        int deletedRow = scheduleHubRepository.deleteSchedule(scheduleId);
+
+        if(deletedRow == 0){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 }

@@ -17,4 +17,10 @@ public interface ScheduleHubRepository {
     List<ScheduleHubResponseDto> findAllSchedule();
 
     List<ScheduleHubResponseDto> findFilteredSchedule(FilterNameUpdateAt filterNameUpdateAt);
+
+    String getPassword(Long scheduleId);
+
+    int updateSchedule(Schedule schedule);
+
+    int deleteSchedule(Long scheduleId);
 }

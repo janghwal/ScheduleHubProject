@@ -44,16 +44,29 @@ public class ScheduleHubController {
 
     //조건에 맞는 일정 조회
     @GetMapping("/filter")
+    @ResponseStatus(HttpStatus.OK)
     public List<ScheduleHubResponseDto> findFilteredSchedule(@RequestBody FilterRequestDto filterRequestDto){
-        log.info("Received filterRequestDto: name={}, time={}", filterRequestDto.getName(), filterRequestDto.getTime());
         return scheduleHubService.findFilteredSchedule(filterRequestDto);
     }
 
 
     //일정 수정
-//    @PutMapping("/{scheduleId}")
+    @PutMapping("/{scheduleId}")
+    public ResponseEntity<ScheduleHubResponseDto> updateSchedule(
+            @PathVariable Long scheduleId,
+            @RequestBody ScheduleHubRequestDto scheduleHubRequestDto
+    ){
+        return new ResponseEntity<>(scheduleHubService.updateSchedule(scheduleId ,scheduleHubRequestDto), HttpStatus.OK);
+    }
 
 
     //일정 삭제
-//    @DeleteMapping("/{scheduleId}")
+    @DeleteMapping("/{scheduleId}")
+    public void deleteSchedule(
+            @PathVariable Long scheduleId,
+            @RequestBody ScheduleHubRequestDto scheduleHubRequestDto
+    ){
+        scheduleHubService.deleteSchedule(scheduleId, scheduleHubRequestDto);
+    }
+
 }
